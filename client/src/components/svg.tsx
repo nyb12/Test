@@ -31,7 +31,7 @@ import questionSuggestion from '../../src/images/questionSuggestion.svg';
 import airplane from '../../src/images/airplane.svg';
 import mobileDashboard from '../../src/images/mobileDashboard.svg';
 import mobileAskquestions from '../../src/images/mobileAskquestions.svg';
-import mobileObservations from '../../src/images/mobileObservations.svg';
+import mobileObservations from '../../src/images/mobileobservations.svg';
 import mobileDocs from '../../src/images/mobileDocs.svg';
 import mobileChatwithother from '../../src/images/mobileChatwithother.svg';
 import bluestar from '../../src/images/bluestar.svg';
