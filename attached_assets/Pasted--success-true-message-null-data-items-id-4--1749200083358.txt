@@ -1,0 +1,111 @@
+{
+  "success": true,
+  "message": null,
+  "data": {
+    "items": [
+      {
+        "id": 4,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "a26c5f74-aac2-4a87-bcaf-032bf743a90d",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "Captain James",
+        "contactLastName": "Rodriguez",
+        "contactEmail": "j.rodriguez@skylineaviation.com",
+        "contactPhone": null,
+        "contactIsEmailVerified": null,
+        "contactIsPhoneVerified": null
+      },
+      {
+        "id": 6,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "21791de8-6f2f-4057-828a-6933f91ccdb7",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "Jill",
+        "contactLastName": "Jones",
+        "contactEmail": "jill@yopmail.com",
+        "contactPhone": null,
+        "contactIsEmailVerified": null,
+        "contactIsPhoneVerified": null
+      },
+      {
+        "id": 1,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "05e40f96-52be-45c1-b5c4-9b3b7f5f2690",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:52.695983Z",
+        "updatedAt": "2025-06-06T06:21:52.695983Z",
+        "contactFirstName": "Kevin",
+        "contactLastName": "D",
+        "contactEmail": "kdecoster@live.com",
+        "contactPhone": "+14805999226",
+        "contactIsEmailVerified": false,
+        "contactIsPhoneVerified": true
+      },
+      {
+        "id": 2,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "94739e1e-4c88-4c98-86ec-77510a9fba9a",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "Lisa",
+        "contactLastName": "Thompson",
+        "contactEmail": "lisa.thompson@flightops.com",
+        "contactPhone": null,
+        "contactIsEmailVerified": null,
+        "contactIsPhoneVerified": null
+      },
+      {
+        "id": 5,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "b9726762-69f4-4284-8529-7425f09c3c6e",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "Michael",
+        "contactLastName": "Chen",
+        "contactEmail": "mchen@partsupply.net",
+        "contactPhone": null,
+        "contactIsEmailVerified": null,
+        "contactIsPhoneVerified": null
+      },
+      {
+        "id": 3,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "41d1c18b-3d92-48f4-abf8-fcef3e0814a1",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "Sarah",
+        "contactLastName": "Mitchell",
+        "contactEmail": "sarah.mitchell@aviationtech.com",
+        "contactPhone": null,
+        "contactIsEmailVerified": null,
+        "contactIsPhoneVerified": null
+      },
+      {
+        "id": 7,
+        "userId": "b587dc6e-66b1-479e-8014-d69e56ac0173",
+        "contactId": "0c597550-a1ee-492a-95b2-2bfd6e7c4a59",
+        "notes": "data seeding",
+        "createdAt": "2025-06-06T06:21:56.655753Z",
+        "updatedAt": "2025-06-06T06:21:56.655753Z",
+        "contactFirstName": "User2",
+        "contactLastName": "Last2",
+        "contactEmail": "NULL",
+        "contactPhone": "+919823361823",
+        "contactIsEmailVerified": false,
+        "contactIsPhoneVerified": true
+      }
+    ],
+    "totalCount": 7,
+    "pageNumber": 1,
+    "pageSize": 100,
+    "totalPages": 1
+  },
+  "errors": null
+}

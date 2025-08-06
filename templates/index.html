@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot with Ratings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Chatbot with Ratings</h1>
+        
+        <div class="chat-container">
+            <div id="chat-box">
+                <!-- Conversation will be displayed here -->
+            </div>
+            
+            <div class="input-container">
+                <div class="message-input">
+                    <input type="text" id="user-message" placeholder="Type your message...">
+                    <button id="send-btn">Send</button>
+                </div>
+                
+                <div class="rating-container">
+                    <span>Rate the response:</span>
+                    <div class="stars">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="history-container">
+            <h2>Conversation History</h2>
+            <div id="history-box">
+                <!-- History will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
