@@ -1,29 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronDown, Send, Upload, Mic, Volume2 } from "lucide-react";
+import React, { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ChevronDown, Send, Upload, Mic, Volume2 } from 'lucide-react';
 
-function AircraftList({ filter, onAircraftSelect }: { filter?: string; onAircraftSelect?: (aircraft: any) => void }) {
+function AircraftList({
+  filter,
+  onAircraftSelect,
+}: {
+  filter?: string;
+  onAircraftSelect?: (aircraft: any) => void;
+}) {
   const { data: aircraft = [] } = useQuery({
     queryKey: ['/api/aircraft'],
-    enabled: true
+    enabled: true,
   });
 
   // Filter aircraft based on selected status
-  const filteredAircraft = filter 
-    ? aircraft.filter((plane: any) => {
+  const filteredAircraft = filter
+    ? (aircraft as any[]).filter((plane: any) => {
         if (!plane.status_tags) return false;
-        const statuses = plane.status_tags.toLowerCase().split(',').map((s: string) => s.trim());
+        const statuses = plane.status_tags
+          .toLowerCase()
+          .split(',')
+          .map((s: string) => s.trim());
         return statuses.includes(filter.toLowerCase());
       })
-    : aircraft;
+    : (aircraft as any[]);
 
   return (
     <div className="space-y-2">
       {filteredAircraft.map((plane: any) => (
-        <div 
-          key={plane.id} 
+        <div
+          key={plane.id}
           className="p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 cursor-pointer transition-colors"
           onClick={() => onAircraftSelect?.(plane)}
         >
@@ -33,24 +42,35 @@ function AircraftList({ filter, onAircraftSelect }: { filter?: string; onAircraf
               <p className="text-sm text-gray-600">{plane.model}</p>
             </div>
             <div className="flex flex-wrap gap-1">
-              {plane.status_tags ? plane.status_tags.split(',').map((status: string, index: number) => {
-                const trimmedStatus = status.trim();
-                return (
-                  <span 
-                    key={index}
-                    className={`px-2 py-1 text-xs rounded-full ${
-                      trimmedStatus === 'operational' ? 'bg-green-100 text-green-800' :
-                      trimmedStatus === 'grounded' ? 'bg-red-100 text-red-800' :
-                      trimmedStatus === 'scheduled' ? 'bg-blue-100 text-blue-800' :
-                      trimmedStatus === 'limited' ? 'bg-gray-100 text-gray-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {trimmedStatus.charAt(0).toUpperCase() + trimmedStatus.slice(1)}
-                  </span>
-                );
-              }) : (
-                <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Unknown</span>
+              {plane.status_tags ? (
+                plane.status_tags
+                  .split(',')
+                  .map((status: string, index: number) => {
+                    const trimmedStatus = status.trim();
+                    return (
+                      <span
+                        key={index}
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          trimmedStatus === 'operational'
+                            ? 'bg-green-100 text-green-800'
+                            : trimmedStatus === 'grounded'
+                            ? 'bg-red-100 text-red-800'
+                            : trimmedStatus === 'scheduled'
+                            ? 'bg-blue-100 text-blue-800'
+                            : trimmedStatus === 'limited'
+                            ? 'bg-gray-100 text-gray-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        {trimmedStatus.charAt(0).toUpperCase() +
+                          trimmedStatus.slice(1)}
+                      </span>
+                    );
+                  })
+              ) : (
+                <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">
+                  Unknown
+                </span>
               )}
             </div>
           </div>
@@ -77,18 +97,21 @@ type Message = {
   filter?: string;
 };
 
-export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: { 
-  selectedAircraft: any; 
-  onAircraftSelect: (aircraft: any) => void; 
+export default function SimpleChatbot({
+  selectedAircraft,
+  onAircraftSelect,
+}: {
+  selectedAircraft: any;
+  onAircraftSelect: (aircraft: any) => void;
 }) {
   const [messages, setMessages] = useState<Message[]>([
-    { text: "How can I help you today?", isUser: false }
+    { text: 'How can I help you today?', isUser: false },
   ]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [hasInteracted, setHasInteracted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<string>("");
+  const [selectedTool, setSelectedTool] = useState<string>('');
 
   // Simplified container system state
   const [completedSections, setCompletedSections] = useState<any[]>([]);
@@ -97,61 +120,64 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
   // Greeting tools
   const { data: greetingTools = [] } = useQuery({
     queryKey: ['/api/tools', { showWithGreeting: true }],
-    enabled: true
+    enabled: true,
   });
 
   // Fetch selective prompts for tools
   const { data: fleetspanPrompts = [] } = useQuery({
     queryKey: ['/api/tools/1006/selective-prompts'],
-    enabled: true
+    enabled: true,
   });
 
   // Container management functions
   const toggleSectionExpansion = (sectionId: string) => {
-    setCompletedSections(prev => 
-      prev.map(section => 
-        section.id === sectionId 
+    setCompletedSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId
           ? { ...section, isExpanded: !section.isExpanded }
-          : section
-      )
+          : section,
+      ),
     );
   };
 
   const createNewContainer = (toolName: string) => {
-    console.log("🎯 Starting new tool session for:", toolName);
-    
+    console.log('🎯 Starting new tool session for:', toolName);
+
     // If we have a current container, move it to completed sections
     if (currentContainer) {
       const completedSection = {
         ...currentContainer,
-        isExpanded: false
+        isExpanded: false,
       };
-      
-      setCompletedSections(prev => [...prev, completedSection]);
+
+      setCompletedSections((prev) => [...prev, completedSection]);
     }
-    
+
     // Create new current container
     setCurrentContainer({
       id: `section_${Date.now()}`,
       toolName: toolName,
-      messages: []
+      messages: [],
     });
   };
 
-  const addMessage = (messageOrUpdater: Message | ((prev: Message[]) => Message[])) => {
-    setMessages(prevMessages => {
-      const newMessages = typeof messageOrUpdater === 'function' 
-        ? messageOrUpdater(prevMessages) 
-        : [...prevMessages, messageOrUpdater];
-      
+  const addMessage = (
+    messageOrUpdater: Message | ((prev: Message[]) => Message[]),
+  ) => {
+    setMessages((prevMessages) => {
+      const newMessages =
+        typeof messageOrUpdater === 'function'
+          ? messageOrUpdater(prevMessages)
+          : [...prevMessages, messageOrUpdater];
+
       // Add to current container if we have one and it's not a function update
       if (currentContainer && typeof messageOrUpdater !== 'function') {
         setCurrentContainer((prev: any) => ({
           ...prev,
-          messages: [...prev.messages, messageOrUpdater]
+          messages: [...prev.messages, messageOrUpdater],
         }));
       }
-      
+
       return newMessages;
     });
   };
@@ -159,54 +185,54 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
   // Tool click handler
   const handleToolClick = async (tool: any) => {
     console.log(`${tool.name} clicked from greeting!`);
-    
+
     // Set selected tool for highlighting
     setSelectedTool(tool.name);
-    
+
     // Create new container for this tool session
     createNewContainer(tool.name);
 
     // Handle FleetSpan specifically - show filter buttons only (no aircraft until status chosen)
-    if (tool.name === "FleetSpan") {
+    if (tool.name === 'FleetSpan') {
       // Add FleetSpan filter buttons only
       const fleetspanMessage = {
-        text: "Filter fleet by status:",
+        text: 'Filter fleet by status:',
         isUser: false,
         isSelectiveAction: true,
         selectivePrompts: fleetspanPrompts as any[],
-        toolOutputId: `fleetspan_${Date.now()}`
+        toolOutputId: `fleetspan_${Date.now()}`,
       };
       addMessage(fleetspanMessage);
-    } else if (tool.name === "Chat with Others") {
+    } else if (tool.name === 'Chat with Others') {
       // Get contacts and add them to current section
       try {
         const response = await fetch('/api/contacts');
         const contactsData = await response.json();
-        
+
         if (contactsData && contactsData.length > 0) {
           // Add contacts message to conversation
           const contactsMessage = {
-            text: "Select a contact to start chatting:",
+            text: 'Select a contact to start chatting:',
             isUser: false,
             isContactsList: true,
             contacts: contactsData,
-            toolOutputId: `contacts_${Date.now()}`
+            toolOutputId: `contacts_${Date.now()}`,
           };
           addMessage(contactsMessage);
         } else {
           const noContactsMessage = {
-            text: "No contacts found. Add some contacts first.",
+            text: 'No contacts found. Add some contacts first.',
             isUser: false,
-            toolOutputId: `no_contacts_${Date.now()}`
+            toolOutputId: `no_contacts_${Date.now()}`,
           };
           addMessage(noContactsMessage);
         }
       } catch (error) {
         console.error('Error fetching contacts:', error);
         const errorMessage = {
-          text: "Failed to load contacts.",
+          text: 'Failed to load contacts.',
           isUser: false,
-          toolOutputId: `contacts_error_${Date.now()}`
+          toolOutputId: `contacts_error_${Date.now()}`,
         };
         addMessage(errorMessage);
       }
@@ -215,11 +241,13 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
       const genericMessage = {
         text: `${tool.name} tool activated.`,
         isUser: false,
-        toolOutputId: `${tool.name.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`
+        toolOutputId: `${tool.name
+          .toLowerCase()
+          .replace(/\s+/g, '_')}_${Date.now()}`,
       };
       addMessage(genericMessage);
     }
-    
+
     setHasInteracted(true);
   };
 
@@ -228,13 +256,13 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
 
     const userMessage: Message = { text: inputValue, isUser: true };
     addMessage(userMessage);
-    setInputValue("");
+    setInputValue('');
     setIsLoading(true);
     setIsTyping(true);
 
     // Simulate bot response
     setTimeout(() => {
-      const botResponse = "This is a response to your message.";
+      const botResponse = 'This is a response to your message.';
       addMessage({ text: botResponse, isUser: false });
       setIsLoading(false);
       setIsTyping(false);
@@ -243,7 +271,7 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
 
   return (
     <div className="h-full flex flex-col">
-      <div 
+      <div
         className="flex-1 overflow-y-auto p-4 space-y-4"
         id="messages-container"
       >
@@ -287,7 +315,9 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
                     onClick={() => handleToolClick(tool)}
                     variant="outline"
                     className={`text-left justify-start h-auto p-3 whitespace-normal ${
-                      selectedTool === tool.name ? 'border-blue-500 bg-blue-50' : ''
+                      selectedTool === tool.name
+                        ? 'border-blue-500 bg-blue-50'
+                        : ''
                     }`}
                   >
                     <div>
@@ -305,12 +335,19 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
 
         {/* Regular chat messages */}
         {messages.slice(1).map((message, index) => (
-          <div key={index} className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[80%] rounded-lg p-3 ${
-              message.isUser 
-                ? "bg-blue-500 text-white rounded-br-none" 
-                : "bg-gray-50 text-gray-800 rounded-bl-none"
-            }`}>
+          <div
+            key={index}
+            className={`flex ${
+              message.isUser ? 'justify-end' : 'justify-start'
+            }`}
+          >
+            <div
+              className={`max-w-[80%] rounded-lg p-3 ${
+                message.isUser
+                  ? 'bg-blue-500 text-white rounded-br-none'
+                  : 'bg-gray-50 text-gray-800 rounded-bl-none'
+              }`}
+            >
               {message.text}
             </div>
           </div>
@@ -318,7 +355,10 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
 
         {/* Prior Containers - Collapsible with gray borders */}
         {completedSections.map((section) => (
-          <div key={section.id} className="border border-gray-300 rounded-lg overflow-hidden bg-white">
+          <div
+            key={section.id}
+            className="border border-gray-300 rounded-lg overflow-hidden bg-white"
+          >
             <div className="bg-gray-50">
               <button
                 onClick={() => toggleSectionExpansion(section.id)}
@@ -328,49 +368,69 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
                   <span className="font-medium text-gray-700 text-sm">
                     {section.toolName}
                     {section.messages.length > 0 && (
-                      <span className="ml-1 text-gray-400">({section.messages.length} items)</span>
+                      <span className="ml-1 text-gray-400">
+                        ({section.messages.length} items)
+                      </span>
                     )}
                   </span>
                 </div>
-                <ChevronDown 
+                <ChevronDown
                   className={`h-3 w-3 text-gray-400 transition-transform ${
                     section.isExpanded ? 'rotate-180' : ''
-                  }`} 
+                  }`}
                 />
               </button>
               {section.isExpanded && (
                 <div className="p-3 border-t border-gray-200 bg-white">
-                  {section.messages.map((message: Message, msgIndex: number) => (
-                    <div key={msgIndex} className={`mb-2 last:mb-0 ${message.isUser ? "text-right" : "text-left"}`}>
-                      {message.isSelectiveAction && message.selectivePrompts ? (
-                        <div className="space-y-3 w-full">
-                          <p className="font-medium text-gray-800">{message.text}</p>
-                          <div className="flex flex-wrap gap-2">
-                            {message.selectivePrompts.map((prompt: any) => (
-                              <Button
-                                key={prompt.id}
-                                variant="outline"
-                                size="sm"
-                                className={prompt.cssClasses || "bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200"}
-                              >
-                                {prompt.promptValue}
-                              </Button>
-                            ))}
+                  {section.messages.map(
+                    (message: Message, msgIndex: number) => (
+                      <div
+                        key={msgIndex}
+                        className={`mb-2 last:mb-0 ${
+                          message.isUser ? 'text-right' : 'text-left'
+                        }`}
+                      >
+                        {message.isSelectiveAction &&
+                        message.selectivePrompts ? (
+                          <div className="space-y-3 w-full">
+                            <p className="font-medium text-gray-800">
+                              {message.text}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {message.selectivePrompts.map((prompt: any) => (
+                                <Button
+                                  key={prompt.id}
+                                  variant="outline"
+                                  size="sm"
+                                  className={
+                                    prompt.cssClasses ||
+                                    'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
+                                  }
+                                >
+                                  {prompt.promptValue}
+                                </Button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ) : message.isAircraftList ? (
-                        <AircraftList filter={message.filter} onAircraftSelect={onAircraftSelect} />
-                      ) : (
-                        <div className={`inline-block p-2 rounded-lg text-sm ${
-                          message.isUser 
-                            ? "bg-blue-500 text-white" 
-                            : "bg-gray-100 text-gray-800"
-                        }`}>
-                          {message.text}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        ) : message.isAircraftList ? (
+                          <AircraftList
+                            filter={message.filter}
+                            onAircraftSelect={onAircraftSelect}
+                          />
+                        ) : (
+                          <div
+                            className={`inline-block p-2 rounded-lg text-sm ${
+                              message.isUser
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            {message.text}
+                          </div>
+                        )}
+                      </div>
+                    ),
+                  )}
                 </div>
               )}
             </div>
@@ -380,55 +440,78 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
         {/* Current Container - No borders, flows naturally */}
         {currentContainer && currentContainer.messages.length > 0 && (
           <div className="space-y-3">
-            {currentContainer.messages.map((message: Message, msgIndex: number) => (
-              <div key={msgIndex} className={`mb-2 last:mb-0 ${message.isUser ? "text-right" : "text-left"}`}>
-                {message.isSelectiveAction && message.selectivePrompts ? (
-                  <div className="space-y-3 w-full">
-                    <p className="font-medium text-gray-800">{message.text}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {message.selectivePrompts.map((prompt: any) => (
-                        <Button
-                          key={prompt.id}
-                          variant="outline"
-                          size="sm"
-                          className={prompt.cssClasses || "bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200"}
-                          onClick={() => {
-                            // Clear previous aircraft list and show new filtered results
-                            const filteredMessages = currentContainer.messages.filter((msg: Message) => !msg.isAircraftList);
-                            const aircraftListMessage = {
-                              text: "",
-                              isUser: false,
-                              isAircraftList: true,
-                              filter: prompt.promptValue,
-                              toolOutputId: `aircraft_list_${Date.now()}`
-                            };
-                            
-                            // Override previous results in current container
-                            setCurrentContainer((prev: any) => ({
-                              ...prev,
-                              messages: [...filteredMessages, aircraftListMessage]
-                            }));
-                            addMessage(aircraftListMessage);
-                          }}
-                        >
-                          {prompt.promptValue}
-                        </Button>
-                      ))}
+            {currentContainer.messages.map(
+              (message: Message, msgIndex: number) => (
+                <div
+                  key={msgIndex}
+                  className={`mb-2 last:mb-0 ${
+                    message.isUser ? 'text-right' : 'text-left'
+                  }`}
+                >
+                  {message.isSelectiveAction && message.selectivePrompts ? (
+                    <div className="space-y-3 w-full">
+                      <p className="font-medium text-gray-800">
+                        {message.text}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {message.selectivePrompts.map((prompt: any) => (
+                          <Button
+                            key={prompt.id}
+                            variant="outline"
+                            size="sm"
+                            className={
+                              prompt.cssClasses ||
+                              'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
+                            }
+                            onClick={() => {
+                              // Clear previous aircraft list and show new filtered results
+                              const filteredMessages =
+                                currentContainer.messages.filter(
+                                  (msg: Message) => !msg.isAircraftList,
+                                );
+                              const aircraftListMessage = {
+                                text: '',
+                                isUser: false,
+                                isAircraftList: true,
+                                filter: prompt.promptValue,
+                                toolOutputId: `aircraft_list_${Date.now()}`,
+                              };
+
+                              // Override previous results in current container
+                              setCurrentContainer((prev: any) => ({
+                                ...prev,
+                                messages: [
+                                  ...filteredMessages,
+                                  aircraftListMessage,
+                                ],
+                              }));
+                              addMessage(aircraftListMessage);
+                            }}
+                          >
+                            {prompt.promptValue}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ) : message.isAircraftList ? (
-                  <AircraftList filter={message.filter} onAircraftSelect={onAircraftSelect} />
-                ) : (
-                  <div className={`inline-block p-2 rounded-lg text-sm ${
-                    message.isUser 
-                      ? "bg-blue-500 text-white" 
-                      : "bg-gray-100 text-gray-800"
-                  }`}>
-                    {message.text}
-                  </div>
-                )}
-              </div>
-            ))}
+                  ) : message.isAircraftList ? (
+                    <AircraftList
+                      filter={message.filter}
+                      onAircraftSelect={onAircraftSelect}
+                    />
+                  ) : (
+                    <div
+                      className={`inline-block p-2 rounded-lg text-sm ${
+                        message.isUser
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}
+                    >
+                      {message.text}
+                    </div>
+                  )}
+                </div>
+              ),
+            )}
           </div>
         )}
       </div>
@@ -440,8 +523,14 @@ export default function SimpleChatbot({ selectedAircraft, onAircraftSelect }: {
             <div className="bg-gray-50 text-gray-800 rounded-lg p-3 rounded-bl-none">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style={{ animationDelay: '0.1s' }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style={{ animationDelay: '0.2s' }}
+                ></div>
               </div>
             </div>
           </div>
