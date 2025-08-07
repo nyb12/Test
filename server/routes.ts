@@ -2,18 +2,18 @@ import type { Express, Request, Response } from 'express';
 import { createServer, request, type Server } from 'http';
 import Stripe from 'stripe';
 import multer from 'multer';
-import userRoutes from './routes/userRoutes';
-import authRoutes from './routes/authRoutes';
-import conversationRoutes from './routes/conversationRoutes';
-import ratingsRoutes from './routes/ratingsRoutes';
-import toolsRoutes from './routes/toolsRoutes';
-import { optionalAuthenticate } from './middlewares/authMiddleware';
-import { externalApiService } from './services/externalApiService';
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import conversationRoutes from './routes/conversationRoutes.js';
+import ratingsRoutes from './routes/ratingsRoutes.js';
+import toolsRoutes from './routes/toolsRoutes.js';
+import { optionalAuthenticate } from './middlewares/authMiddleware.js';
+import { externalApiService } from './services/externalApiService.js';
 import {
   summarizeConversation,
   type ConversationMessage,
-} from './services/openaiService';
-import { db } from './db';
+} from './services/openaiService.js';
+import { db } from './db.js';
 import { subscriptionPlans } from '@shared/schema';
 
 if (!process.env.STRIPE_SECRET_KEY) {
