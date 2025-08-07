@@ -3,9 +3,9 @@ dotenv.config();
 
 import express, { type Request, Response, NextFunction } from 'express';
 import session from 'express-session';
-import { registerRoutes } from './routes.ts';
-import { setupVite, serveStatic, log } from './vite.ts';
-import { heartbeatService } from './services/heartbeatService';
+import { registerRoutes } from './routes.js';
+import { setupVite, serveStatic, log } from './vite.js';
+import { heartbeatService } from './services/heartbeatService.js';
 import OpenAI from 'openai';
 
 const app = express();
