@@ -502,8 +502,10 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get('env') === 'development') {
+    log('Starting in development mode – setting up Vite middleware...');
     await setupVite(app, server);
   } else {
+    log('Starting in production mode – serving static build...');
     serveStatic(app);
   }
 
